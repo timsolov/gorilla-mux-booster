@@ -17,33 +17,39 @@ func NewRouter() *Router {
 }
 
 // POST method
-func (r *Router) POST(path string, f func(http.ResponseWriter, *http.Request)) {
+func (r *Router) POST(path string, f func(http.ResponseWriter, *http.Request)) *Router {
 	r.HandleFunc(path, f).Methods(http.MethodPost)
+	return r
 }
 
 // GET method
-func (r *Router) GET(path string, f func(http.ResponseWriter, *http.Request)) {
+func (r *Router) GET(path string, f func(http.ResponseWriter, *http.Request)) *Router {
 	r.HandleFunc(path, f).Methods(http.MethodGet)
+	return r
 }
 
 // PUT method
-func (r *Router) PUT(path string, f func(http.ResponseWriter, *http.Request)) {
+func (r *Router) PUT(path string, f func(http.ResponseWriter, *http.Request)) *Router {
 	r.HandleFunc(path, f).Methods(http.MethodPut)
+	return r
 }
 
 // DELETE method
-func (r *Router) DELETE(path string, f func(http.ResponseWriter, *http.Request)) {
+func (r *Router) DELETE(path string, f func(http.ResponseWriter, *http.Request)) *Router {
 	r.HandleFunc(path, f).Methods(http.MethodDelete)
+	return r
 }
 
 // PATCH method
-func (r *Router) PATCH(path string, f func(http.ResponseWriter, *http.Request)) {
+func (r *Router) PATCH(path string, f func(http.ResponseWriter, *http.Request)) *Router {
 	r.HandleFunc(path, f).Methods(http.MethodPatch)
+	return r
 }
 
 // HEAD method
-func (r *Router) HEAD(path string, f func(http.ResponseWriter, *http.Request)) {
+func (r *Router) HEAD(path string, f func(http.ResponseWriter, *http.Request)) *Router {
 	r.HandleFunc(path, f).Methods(http.MethodHead)
+	return r
 }
 
 // Use appends a MiddlewareFunc to the chain
