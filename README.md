@@ -43,3 +43,15 @@ The simple wrapper to improve features of [github.com/gorilla/mux](https://githu
     r.PUT("/edit", handler.Edit)
     http.ListenAndServe(":8000", r)
     ```
+
+* possible use macros in uri definition
+    ```go
+    // was:
+    r.GET("/user/{user_id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", handler.User)
+    // become:
+    r.GET("/user/{user_id:@uuid@}", handler.User)
+    ```
+
+    supported macros:
+    * `@uuid@`: `[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`
+	* `@num@`:  `[0-9]+`
