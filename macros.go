@@ -7,6 +7,13 @@ var macros = map[string]string{
 	"@num@":  "[0-9]+",
 }
 
+// Macros adds new macros with name and regex.
+// Then you can use it in your routes as @name@
+//   router.GET("/{param:@name@}/ok", handler)
+func Macros(name, regex string) {
+	macros["@"+name+"@"] = regex
+}
+
 // m replaces macroses in uri string
 func m(uri string) string {
 	const (
