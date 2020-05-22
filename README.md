@@ -1,5 +1,5 @@
 # gorilla-mux-booster
-The simple wrapper to improve features of [github.com/gorilla/mux](https://github.com/gorilla/mux)
+The simple wrapper to improve features of awesome [github.com/gorilla/mux](https://github.com/gorilla/mux). The package's gmb.NewRouter fully compatible with mux.NewRouter and you can start use it simply by replacing path in your import section to `github.com/timsolov/gorilla-mux-booster`.
 
 ### Features
 * add support for idiomatic right way to add CORS and other middlewares over the routes.
