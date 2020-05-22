@@ -3,27 +3,17 @@ The simple wrapper to improve features of [github.com/gorilla/mux](https://githu
 
 ### Features
 * add support for idiomatic right way to add CORS and other middlewares over the routes.
-    
-    Old way:
     ```go
+    // was:
     r := mux.NewRouter()
-    ...
     http.ListenAndServe(":8000", handlers.RecoveryHandler()(handlers.CORS(rules)(r)))
-    ```
-    New way:
-    ```go
+    // now:
     r := gmb.NewRouter()
     r.UseOver(handlers.RecoveryHandler())
     r.UseOver(handlers.CORS(rules))
-    // OR
-    // r.UseOver(
-    //   handlers.RecoveryHandler(),
-    //   handlers.CORS(rules),
-    // )
-    http.ListenAndServe(":8000", r)
     ```
 
-    Or you can use [github.com/rs/cors](http://github.com/rs/cors) as middleware:
+    Or you can use third party packeages like [github.com/rs/cors](http://github.com/rs/cors) as middleware:
     ```go
     r := gmb.NewRouter()
     c := cors.New(cors.Options{
@@ -31,27 +21,34 @@ The simple wrapper to improve features of [github.com/gorilla/mux](https://githu
         AllowCredentials: true,
     })
     r.UseOver(c.Handler)
-    http.ListenAndServe(":8000", r)
     ```
 
-* add http methods as methods of route.
-    Now you could mount handlers like below:
+* mount routes by http method name:
     ```go
+    // was:
+    r := mux.NewRouter()
+    r.HandleFunc("/hello", handler.Hello).Methods("GET")
+    r.HandleFunc("/create", handler.Create).Methods("POST")
+    r.HandleFunc("/edit", handler.Edit).Methods("PUT")
+    // now:
     r := gmb.NewRouter()
     r.GET("/hello", handler.Hello)
     r.POST("/create", handler.Create)
     r.PUT("/edit", handler.Edit)
-    http.ListenAndServe(":8000", r)
     ```
 
-* possible use macros in uri definition
+* possible use predefined regex macros in uri definition:
     ```go
     // was:
     r.GET("/user/{user_id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", handler.User)
-    // become:
+    // now:
     r.GET("/user/{user_id:@uuid@}", handler.User)
+    
+    // if you'd like to define your own macros do it like:
+    gmb.Macros("alphabet", "[A-Z0-9]")
+    r.GET("/invite/{code:@alphabet@}", handler.Invite)
     ```
 
-    supported macros:
+    default macros:
     * `@uuid@`: `[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`
-	* `@num@`:  `[0-9]+`
+    * `@num@`:  `[0-9]+`
