@@ -11,7 +11,7 @@ import (
 
 func TestMacros(t *testing.T) {
 	router := NewRouter()
-	Macros("code", "[0-9A-Z]+")
+	RegisterRegex("code", "[0-9A-Z]+")
 	router.GET("/{param:@uuid@}/ok", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("uuid:" + mux.Vars(r)["param"]))
 	})

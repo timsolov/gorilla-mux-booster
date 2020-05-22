@@ -11,10 +11,10 @@ The simple wrapper to improve features of awesome [github.com/gorilla/mux](https
     r := gmb.NewRouter()
     r.UseOver(handlers.RecoveryHandler())
     r.UseOver(handlers.CORS(rules))
-    ```
-
-    Or you can use third party packeages like [github.com/rs/cors](http://github.com/rs/cors) as middleware:
-    ```go
+    // or inline:
+    r.UseOver(handlers.RecoveryHandler(), handlers.CORS(rules))
+    
+    // or you can use third party packages like `github.com/rs/cors` as middleware:
     r := gmb.NewRouter()
     c := cors.New(cors.Options{
         AllowedOrigins: []string{"http://foo.com", "http://foo.com:8080"},
@@ -37,18 +37,20 @@ The simple wrapper to improve features of awesome [github.com/gorilla/mux](https
     r.PUT("/edit", handler.Edit)
     ```
 
-* possible use predefined regex macros in uri definition:
+* possible use regex contractions in uri definition:
     ```go
     // was:
-    r.GET("/user/{user_id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", handler.User)
+    r.GET("/user/{user_id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", handler.User) // UUID pattern
     // now:
-    r.GET("/user/{user_id:@uuid@}", handler.User)
+    r.GET("/user/{user_id:@uuid@}", handler.User) // @uuid@ is a predefined contraction
     
-    // if you'd like to define your own macros do it like:
-    gmb.Macros("alphabet", "[A-Z0-9]")
-    r.GET("/invite/{code:@alphabet@}", handler.Invite)
+    // if you'd like to define your own contraction do it like:
+    gmb.RegisterRegex("md5", "[a-f0-9]{32}")
+    r.GET("/invite/{code:@md5@}", handler.Invite)
     ```
 
-    default macros:
-    * `@uuid@`: `[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`
-    * `@num@`:  `[0-9]+`
+    predefined default contractions:
+    * `@uuid@`:     `[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`
+    * `@num@`:      `[0-9]+`
+    * `@alpha@`:    `[a-zA-Z]+`,
+	* `@alphanum@`: `[a-zA-Z0-9]+`,
