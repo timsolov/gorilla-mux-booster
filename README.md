@@ -54,3 +54,11 @@ The simple wrapper to improve features of awesome [github.com/gorilla/mux](https
     * `@num@`:      `[0-9]+`
     * `@alpha@`:    `[a-zA-Z]+`,
 	* `@alphanum@`: `[a-zA-Z0-9]+`,
+
+* possible use aliases for routes:
+    ```go
+    gmb.RegisterAlias("{user_id}", "{user_id:@uuid@}") // @uuid@ is a predefined contraction
+    r.GET("/user/{user_id}", handler.User) // pretty route
+    // will extended to `{user_id:@uuid@}` and after that to `{user_id:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}`
+    ```
+    Don't worry about performance. The actions above executes only once at startup.
