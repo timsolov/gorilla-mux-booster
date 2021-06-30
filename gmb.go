@@ -69,6 +69,11 @@ func (r *Router) Subrouter() *Router {
 	return &Router{r.NewRoute().Subrouter(), nil}
 }
 
+// Group creates subrouter with prefix
+func (r *Router) Group(prefix string) *Router {
+	return &Router{r.PathPrefix(c(prefix)).Subrouter(), nil}
+}
+
 // ServeHTTP realization the Handler interface
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	var handler http.Handler = r.Router
